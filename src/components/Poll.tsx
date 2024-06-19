@@ -1,59 +1,102 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import SmileySlider from "./SmileySlider";
+import Speedometer from "./Speedometer";
 
 type PollProps = {
-    question: string;
-    options: string[];
+    questions: { question: string; options: string[] }[];
+    design: "buttons" | "smiley-slider" | "speedometer";
 };
 
-const Poll: React.FC<PollProps> = ({ question, options }) => {
+const Poll: React.FC<PollProps> = ({ questions, design }) => {
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const currentQuestion = questions[currentQuestionIndex];
+
     const [votes, setVotes] = useState<number[]>(() => {
-        const savedVotes = localStorage.getItem(question);
+        const savedVotes = localStorage.getItem(currentQuestion.question);
         return savedVotes
             ? JSON.parse(savedVotes)
-            : new Array(options.length).fill(0);
+            : new Array(currentQuestion.options.length).fill(0);
     });
 
     const handleVote = (index: number) => {
         const newVotes = [...votes];
         newVotes[index] += 1;
         setVotes(newVotes);
-        localStorage.setItem(question, JSON.stringify(newVotes));
+        localStorage.setItem(
+            currentQuestion.question,
+            JSON.stringify(newVotes)
+        );
     };
 
-    return (
-        <motion.div
-            className="p-4 bg-gray-100 rounded shadow-md"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            <motion.h2
-                className="text-xl mb-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-            >
-                {question}
-            </motion.h2>
-            {options.map((option, index) => (
-                <motion.div
-                    key={index}
-                    className="mb-2"
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * index, duration: 0.5 }}
-                >
+    const handleNextQuestion = () => {
+        setCurrentQuestionIndex(
+            (prevIndex) => (prevIndex + 1) % questions.length
+        );
+        const nextQuestion =
+            questions[(currentQuestionIndex + 1) % questions.length];
+        const nextVotes = localStorage.getItem(nextQuestion.question);
+        setVotes(
+            nextVotes
+                ? JSON.parse(nextVotes)
+                : new Array(nextQuestion.options.length).fill(0)
+        );
+    };
+
+    const renderButtons = () => (
+        <>
+            {currentQuestion.options.map((option, index) => (
+                <div key={index} style={{ marginBottom: "10px" }}>
                     <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        style={{
+                            backgroundColor: "#007BFF",
+                            color: "#fff",
+                            padding: "10px 20px",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                        }}
                         onClick={() => handleVote(index)}
                     >
                         {option}
                     </button>
-                    <span className="ml-2">{votes[index]}</span>
-                </motion.div>
+                    <span style={{ marginLeft: "10px" }}>{votes[index]}</span>
+                </div>
             ))}
-        </motion.div>
+        </>
+    );
+
+    const renderSmileySlider = () => <SmileySlider onRate={handleVote} />;
+
+    const renderSpeedometer = () => <Speedometer onRate={handleVote} />;
+
+    return (
+        <div
+            style={{
+                padding: "20px",
+                backgroundColor: "#f3f3f3",
+                borderRadius: "5px",
+                boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+            }}
+        >
+            <h2 style={{ fontSize: "1.5rem", marginBottom: "10px" }}>
+                {currentQuestion.question}
+            </h2>
+            {design === "buttons" && renderButtons()}
+            {design === "smiley-slider" && renderSmileySlider()}
+            {design === "speedometer" && renderSpeedometer()}
+            <button
+                onClick={handleNextQuestion}
+                style={{
+                    marginTop: "20px",
+                    padding: "10px 20px",
+                    backgroundColor: "#28a745",
+                    color: "#fff",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                }}
+            >
+                Next Question
+            </button>
+        </div>
     );
 };
 

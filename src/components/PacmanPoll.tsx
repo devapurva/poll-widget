@@ -65,10 +65,22 @@ const PacmanPoll: React.FC<PacmanPollProps> = ({
     currentVotes,
 }) => {
     const [position, setPosition] = useState(0);
-    const [vote, setVote] = useState<string | null>(null);
+    const [vote, setVote] = useState<number | null>(null);
     const [pelletsVisible, setPelletsVisible] = useState<boolean[]>(
         options.map(() => true)
     );
+
+    useEffect(() => {
+        const savedVote = currentVotes.findIndex((count) => count > 0);
+        if (savedVote !== -1) {
+            setPosition(savedVote * 33 + 15);
+            setVote(savedVote);
+        } else {
+            setPosition(0);
+            setVote(null);
+        }
+        setPelletsVisible(options.map(() => true));
+    }, [question, options, currentVotes]);
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
@@ -91,7 +103,7 @@ const PacmanPoll: React.FC<PacmanPollProps> = ({
     useEffect(() => {
         const index = Math.floor(position / 33);
         if (position % 33 === 0 && index < options.length) {
-            setVote(options[index]);
+            setVote(index);
             setTimeout(() => {
                 setPelletsVisible((prevVisible) =>
                     prevVisible.map((visible, i) =>
@@ -127,14 +139,14 @@ const PacmanPoll: React.FC<PacmanPollProps> = ({
                     />
                 ))}
             </Maze>
-            {vote && (
+            {vote !== null && (
                 <p
                     style={{
                         color: "white",
                         zIndex: 20,
                     }}
                 >
-                    You voted for: {vote}
+                    You voted for: {options[vote]}
                 </p>
             )}
         </PollContainer>

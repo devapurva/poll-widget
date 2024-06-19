@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PacmanPoll from "./PackmanPoll";
+import PacmanPoll from "./PacmanPoll";
 
 type PollProps = {
     questions: { question: string; options: string[] }[];
@@ -10,7 +10,6 @@ const Poll: React.FC<PollProps> = ({ questions, design }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const currentQuestion = questions[currentQuestionIndex];
 
-    // Store votes for all questions
     const [votes, setVotes] = useState<number[][]>(() => {
         const savedVotes = questions.map((q) =>
             JSON.parse(localStorage.getItem(q.question) || "[]")
@@ -20,12 +19,11 @@ const Poll: React.FC<PollProps> = ({ questions, design }) => {
             : questions.map((q) => new Array(q.options.length).fill(0));
     });
 
-    // Get current question votes
-    const currentVotes = votes[currentQuestionIndex];
-
     const handleVote = (index: number) => {
         const newVotes = [...votes];
-        newVotes[currentQuestionIndex][index] += 1;
+        newVotes[currentQuestionIndex] = newVotes[currentQuestionIndex].map(
+            (vote, i) => (i === index ? 1 : 0)
+        );
         setVotes(newVotes);
         localStorage.setItem(
             currentQuestion.question,
@@ -56,7 +54,7 @@ const Poll: React.FC<PollProps> = ({ questions, design }) => {
                     question={currentQuestion.question}
                     options={currentQuestion.options}
                     handleVote={handleVote}
-                    currentVotes={currentVotes}
+                    currentVotes={votes[currentQuestionIndex]}
                 />
             )}
             <button

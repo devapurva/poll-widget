@@ -1,46 +1,136 @@
-# Getting Started with Create React App
+# Interactive Poll Widget
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is an interactive poll widget built using React. It includes a fun and animated Pac-Man themed poll component. The widget can handle multiple sets of questions and options, and allows users to vote using both mouse clicks and keyboard navigation.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Display a simple poll with configurable questions and options.
+- Handle multiple sets of questions.
+- Save and display votes for each question independently.
+- Animated Pac-Man theme for voting.
+- Keyboard and mouse interaction for voting.
+- Votes are saved in local storage.
+- Lightweight and easily embeddable into HTML pages.
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+These instructions will help you set up the project on your local machine for development and testing purposes.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+Make sure you have the following installed on your machine:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js
+- npm (Node Package Manager)
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository to your local machine:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    ```bash
+    git clone https://github.com/devapurva/poll-widget.git
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Navigate to the project directory:
 
-### `npm run eject`
+    ```bash
+    cd interactive-poll-widget
+    ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+3. Install the dependencies:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    ```bash
+    npm install
+    ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+4. Start the development server:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    ```bash
+    npm start
+    ```
 
-## Learn More
+    The application will be available at `http://localhost:3000`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Building for Production
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To create a production build of the project, run:
+
+```bash
+npm run build
+```
+
+The production-ready files will be in the dist directory.
+
+## Embedding the Widget
+
+To embed the poll widget in an HTML page, follow these steps:
+
+1. Build the project as described above.
+    ```bash
+    npm run build
+    ```
+
+2. Copy the contents of the dist directory to your web server.
+
+3. Include the following script in your HTML page:
+    ```bash
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Interactive Poll Widget</title>
+    </head>
+    <body>
+        <div id="poll-widget"></div>
+        <script src="path/to/bundle.js"></script>
+        <script>
+            const questions = [
+                {
+                    question: "How do you feel today?",
+                    options: ["Brilliant! I have so much energy", "Always can be worse.", "Please, end my misery."]
+                },
+                {
+                    question: "How do you like the Opinary test?",
+                    options: ["It was great and so challenging.", "Not bad, but you can improve.", "It was a nightmare, never again."]
+                }
+            ];
+            
+            const container = document.getElementById('poll-widget');
+            mountWidget(container, questions, 'pacman');
+        </script>
+    </body>
+    </html>
+   ```
+
+## Configuration
+
+You can configure the questions and options by modifying the questions array in the script tag of your HTML page.
+
+## Testing
+
+To run the unit tests, use the following command:
+
+```bash
+npm test
+```
+
+The tests are written using Jest and React Testing Library.
+
+## Documentation
+
+The main components of the project are:
+
+1. `Poll.tsx`: The main poll component that handles multiple questions and options.
+2. `PacmanPoll.tsx`: The Pac-Man themed poll component.
+3. `index.tsx`: The entry point of the application.
+4. `index.css`: The main stylesheet.
+5. `assets`: Directory containing the images used for the Pac-Man animation.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Author
+
+Apurva Wadekar

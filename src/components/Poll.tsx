@@ -1,30 +1,35 @@
-import React, { useState } from "react";
-import SmileySlider from "./SmileySlider";
-import Speedometer from "./Speedometer";
+import React, { useState, useEffect } from "react";
+import PacmanPoll from "./PackmanPoll";
 
 type PollProps = {
     questions: { question: string; options: string[] }[];
-    design: "buttons" | "smiley-slider" | "speedometer";
+    design: "buttons" | "pacman";
 };
 
 const Poll: React.FC<PollProps> = ({ questions, design }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const currentQuestion = questions[currentQuestionIndex];
 
-    const [votes, setVotes] = useState<number[]>(() => {
-        const savedVotes = localStorage.getItem(currentQuestion.question);
-        return savedVotes
-            ? JSON.parse(savedVotes)
-            : new Array(currentQuestion.options.length).fill(0);
+    // Store votes for all questions
+    const [votes, setVotes] = useState<number[][]>(() => {
+        const savedVotes = questions.map((q) =>
+            JSON.parse(localStorage.getItem(q.question) || "[]")
+        );
+        return savedVotes.length > 0
+            ? savedVotes
+            : questions.map((q) => new Array(q.options.length).fill(0));
     });
+
+    // Get current question votes
+    const currentVotes = votes[currentQuestionIndex];
 
     const handleVote = (index: number) => {
         const newVotes = [...votes];
-        newVotes[index] += 1;
+        newVotes[currentQuestionIndex][index] += 1;
         setVotes(newVotes);
         localStorage.setItem(
             currentQuestion.question,
-            JSON.stringify(newVotes)
+            JSON.stringify(newVotes[currentQuestionIndex])
         );
     };
 
@@ -32,57 +37,28 @@ const Poll: React.FC<PollProps> = ({ questions, design }) => {
         setCurrentQuestionIndex(
             (prevIndex) => (prevIndex + 1) % questions.length
         );
-        const nextQuestion =
-            questions[(currentQuestionIndex + 1) % questions.length];
-        const nextVotes = localStorage.getItem(nextQuestion.question);
-        setVotes(
-            nextVotes
-                ? JSON.parse(nextVotes)
-                : new Array(nextQuestion.options.length).fill(0)
-        );
     };
-
-    const renderButtons = () => (
-        <>
-            {currentQuestion.options.map((option, index) => (
-                <div key={index} style={{ marginBottom: "10px" }}>
-                    <button
-                        style={{
-                            backgroundColor: "#007BFF",
-                            color: "#fff",
-                            padding: "10px 20px",
-                            borderRadius: "5px",
-                            cursor: "pointer",
-                        }}
-                        onClick={() => handleVote(index)}
-                    >
-                        {option}
-                    </button>
-                    <span style={{ marginLeft: "10px" }}>{votes[index]}</span>
-                </div>
-            ))}
-        </>
-    );
-
-    const renderSmileySlider = () => <SmileySlider onRate={handleVote} />;
-
-    const renderSpeedometer = () => <Speedometer onRate={handleVote} />;
 
     return (
         <div
             style={{
                 padding: "20px",
-                backgroundColor: "#f3f3f3",
+                backgroundColor: "black",
                 borderRadius: "5px",
                 boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
             }}
         >
-            <h2 style={{ fontSize: "1.5rem", marginBottom: "10px" }}>
-                {currentQuestion.question}
-            </h2>
-            {design === "buttons" && renderButtons()}
-            {design === "smiley-slider" && renderSmileySlider()}
-            {design === "speedometer" && renderSpeedometer()}
+            {design === "pacman" && (
+                <PacmanPoll
+                    question={currentQuestion.question}
+                    options={currentQuestion.options}
+                    handleVote={handleVote}
+                    currentVotes={currentVotes}
+                />
+            )}
             <button
                 onClick={handleNextQuestion}
                 style={{

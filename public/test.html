@@ -7,9 +7,9 @@
 </head>
 <body>
   <div id="poll-widget-container"></div>
-  <script src="build/static/js/main.js"></script>
+  <script src="/static/js/main.js"></script>
   <script>
-    PollWidget.mountWidget('poll-widget-container', [
+    const questions = [
       {
         question: 'How do you feel today?',
         options: ['Brilliant! I have so much energy', 'Always can be worse.', 'Please, end my misery.'],
@@ -18,7 +18,9 @@
         question: 'How do you like the Opinary test?',
         options: ['It was great and so challenging.', 'Not bad, but you can improve.', 'It was a nightmare, never again.'],
       },
-    ], 'smiley-slider');
+    ];
+
+    mountWidget('poll-widget-container', questions, 'pacman');
   </script>
 </body>
 </html>

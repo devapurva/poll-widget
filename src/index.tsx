@@ -1,32 +1,20 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
+import ReactDOM from "react-dom";
 import Poll from "./components/Poll";
+import "./index.css";
 
-const questions = [
-    {
-        question: "How do you feel today?",
-        options: [
-            "Brilliant! I have so much energy",
-            "Always can be worse.",
-            "Please, end my misery.",
-        ],
-    },
-    {
-        question: "How do you like the Opinary test?",
-        options: [
-            "It was great and so challenging.",
-            "Not bad, but you can improve.",
-            "It was a nightmare, never again.",
-        ],
-    },
-];
+const mountWidget = (
+    elementId: string,
+    questions: { question: string; options: string[] }[],
+    design: "buttons" | "pacman"
+) => {
+    ReactDOM.render(
+        <React.StrictMode>
+            <Poll questions={questions} design={design} />
+        </React.StrictMode>,
+        document.getElementById(elementId)
+    );
+};
 
-const container = document.getElementById("root");
-const root = createRoot(container!);
-
-root.render(
-    <React.StrictMode>
-        <Poll questions={questions} design="pacman" />
-    </React.StrictMode>
-);
+window.mountWidget = mountWidget;
+export { mountWidget };

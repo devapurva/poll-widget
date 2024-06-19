@@ -59,7 +59,7 @@ To create a production build of the project, run:
 npm run build
 ```
 
-The production-ready files will be in the dist directory.
+The production-ready files will be in the build directory.
 
 ## Embedding the Widget
 
@@ -70,7 +70,7 @@ To embed the poll widget in an HTML page, follow these steps:
     npm run build
     ```
 
-2. Copy the contents of the dist directory to your web server.
+2. Copy the contents of the build directory to your web server.
 
 3. Include the following script in your HTML page:
     ```bash

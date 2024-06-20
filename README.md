@@ -34,7 +34,7 @@ Make sure you have the following installed on your machine:
 2. Navigate to the project directory:
 
     ```bash
-    cd interactive-poll-widget
+    cd poll-widget
     ```
 
 3. Install the dependencies:
@@ -77,28 +77,27 @@ To embed the poll widget in an HTML page, follow these steps:
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Interactive Poll Widget</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Poll Widget Test</title>
     </head>
     <body>
-        <div id="poll-widget"></div>
-        <script src="path/to/bundle.js"></script>
-        <script>
-            const questions = [
-                {
-                    question: "How do you feel today?",
-                    options: ["Brilliant! I have so much energy", "Always can be worse.", "Please, end my misery."]
-                },
-                {
-                    question: "How do you like the Opinary test?",
-                    options: ["It was great and so challenging.", "Not bad, but you can improve.", "It was a nightmare, never again."]
-                }
-            ];
-            
-            const container = document.getElementById('poll-widget');
-            mountWidget(container, questions, 'pacman');
-        </script>
+      <div id="poll-widget-container"></div>
+      <script src="/static/js/main.js"></script>
+      <script>
+        const questions = [
+          {
+            question: 'How do you feel today?',
+            options: ['Brilliant! I have so much energy', 'Always can be worse.', 'Please, end my misery.'],
+          },
+          {
+            question: 'How do you like the Opinary test?',
+            options: ['It was great and so challenging.', 'Not bad, but you can improve.', 'It was a nightmare, never again.'],
+          },
+        ];
+    
+        mountWidget('poll-widget-container', questions, 'pacman');
+      </script>
     </body>
     </html>
    ```

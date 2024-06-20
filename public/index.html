@@ -3,10 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>React App</title>
+  <title>Poll Widget Test</title>
 </head>
 <body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
+  <div id="poll-widget-container"></div>
+  <script src="/static/js/main.js"></script>
+  <script>
+    const questions = [
+      {
+        question: 'How do you feel today?',
+        options: ['Brilliant! I have so much energy', 'Always can be worse.', 'Please, end my misery.'],
+      },
+      {
+        question: 'How do you like the Opinary test?',
+        options: ['It was great and so challenging.', 'Not bad, but you can improve.', 'It was a nightmare, never again.'],
+      },
+    ];
+
+    mountWidget('poll-widget-container', questions, 'pacman');
+  </script>
 </body>
 </html>

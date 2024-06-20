@@ -41,7 +41,7 @@ const mountWidget = (
 
 // Mount the widget on the 'root' element for local testing
 document.addEventListener("DOMContentLoaded", () => {
-    mountWidget("root");
+    mountWidget("poll-widget-container"); // Ex: mountWidget("poll-widget-container");
 });
 
 window.mountWidget = mountWidget;

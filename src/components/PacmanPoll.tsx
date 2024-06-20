@@ -55,7 +55,7 @@ type PacmanPollProps = {
     question: string;
     options: string[];
     handleVote: (index: number) => void;
-    currentVotes: number[];
+    currentVotes: any;
 };
 
 const PacmanPoll: React.FC<PacmanPollProps> = ({
@@ -65,22 +65,21 @@ const PacmanPoll: React.FC<PacmanPollProps> = ({
     currentVotes,
 }) => {
     const [position, setPosition] = useState(0);
-    const [vote, setVote] = useState<number | null>(null);
+    const [vote, setVote] = useState<string | null>(null);
     const [pelletsVisible, setPelletsVisible] = useState<boolean[]>(
         options.map(() => true)
     );
 
-    useEffect(() => {
-        const savedVote = currentVotes.findIndex((count) => count > 0);
-        if (savedVote !== -1) {
-            setPosition(savedVote * 33 + 15);
-            setVote(savedVote);
-        } else {
-            setPosition(0);
-            setVote(null);
-        }
-        setPelletsVisible(options.map(() => true));
-    }, [question, options, currentVotes]);
+    const handleVoteInternal = (index: number) => {
+        setPosition(index * 33 + 15);
+        setVote(options[index]);
+        handleVote(index);
+        setTimeout(() => {
+            setPelletsVisible((prevVisible) =>
+                prevVisible.map((visible, i) => (i === index ? false : visible))
+            );
+        }, 500); // Match this with the transition duration
+    };
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
@@ -103,17 +102,16 @@ const PacmanPoll: React.FC<PacmanPollProps> = ({
     useEffect(() => {
         const index = Math.floor(position / 33);
         if (position % 33 === 0 && index < options.length) {
-            setVote(index);
+            setVote(options[index]);
             setTimeout(() => {
                 setPelletsVisible((prevVisible) =>
                     prevVisible.map((visible, i) =>
                         i === index ? false : visible
                     )
                 );
-                handleVote(index);
             }, 500); // Match this with the transition duration
         }
-    }, [position, options, handleVote]);
+    }, [position, options]);
 
     return (
         <PollContainer>
@@ -133,20 +131,18 @@ const PacmanPoll: React.FC<PacmanPollProps> = ({
                         position={index * 33 + 15}
                         alt="Pellet"
                         visible={pelletsVisible[index]}
-                        onClick={() => {
-                            setPosition(index * 33 + 15);
-                        }}
+                        onClick={() => handleVoteInternal(index)}
                     />
                 ))}
             </Maze>
-            {vote !== null && (
+            {vote && (
                 <p
                     style={{
                         color: "white",
                         zIndex: 20,
                     }}
                 >
-                    You voted for: {options[vote]}
+                    You voted for: {vote}
                 </p>
             )}
         </PollContainer>

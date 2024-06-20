@@ -116,6 +116,29 @@ npm test
 
 The tests are written using Jest and React Testing Library.
 
+
+## Running `test.html` Locally
+
+To test the test.html file locally:
+
+1. Install `http-server` globally if you haven't already:
+    ``` bash
+    npm install -g http-server
+    ```
+2. Build the project:
+    ``` bash
+    npm install -g http-server
+    ```
+3. Navigate to the `build` directory:
+    ``` bash
+    cd build
+    ```
+4. Start the server using `http-server`:
+    ``` bash
+    npx http-server ./
+    ```
+5. Open `http://localhost:8080/test.html` in your browser to see the poll widget.
+
 ## Documentation
 
 The main components of the project are:

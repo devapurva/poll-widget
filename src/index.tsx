@@ -8,25 +8,46 @@ const defaultQuestions = [
     {
         question: "How do you feel today?",
         options: [
-            "Brilliant! I have so much energy",
-            "Always can be worse.",
-            "Please, end my misery.",
+            {
+                text: "Brilliant! I have so much energy",
+                percentage: 23,
+            },
+            {
+                text: "Always can be worse.",
+                percentage: 10,
+            },
+            {
+                text: "Please, end my misery.",
+                percentage: 67,
+            },
         ],
     },
     {
         question: "How do you like the Opinary test?",
         options: [
-            "It was great and so challenging.",
-            "Not bad, but you can improve.",
-            "It was a nightmare, never again.",
+            {
+                text: "It was great and so challenging.",
+                percentage: 25,
+            },
+            {
+                text: "Not bad, but you can improve.",
+                percentage: 32,
+            },
+            {
+                text: "It was a nightmare, never again.",
+                percentage: 43,
+            },
         ],
     },
 ];
 
 const mountWidget = (
     elementId: string,
-    questions: { question: string; options: string[] }[] = defaultQuestions,
-    design: "buttons" | "pacman" = "pacman"
+    questions: {
+        question: string;
+        options: { text: string; percentage: number }[];
+    }[] = defaultQuestions,
+    design: "buttons" | "bubbles" = "bubbles"
 ) => {
     const container = document.getElementById(elementId);
     if (container) {

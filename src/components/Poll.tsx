@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import PacmanPoll from "./PacmanPoll";
+import BubblePoll from "./BubblePoll";
 
 type PollProps = {
     questions: { question: string; options: string[] }[];
-    design: "buttons" | "pacman";
+    design: "bubbles" | "pacman";
 };
 
 const Poll: React.FC<PollProps> = ({ questions, design }) => {
@@ -49,14 +49,12 @@ const Poll: React.FC<PollProps> = ({ questions, design }) => {
                 alignItems: "center",
             }}
         >
-            {design === "pacman" && (
-                <PacmanPoll
-                    question={currentQuestion.question}
-                    options={currentQuestion.options}
-                    handleVote={handleVote}
-                    currentVotes={votes[currentQuestionIndex]}
-                />
-            )}
+            <BubblePoll
+                question={currentQuestion.question}
+                options={currentQuestion.options}
+                handleVote={handleVote}
+                currentVotes={votes[currentQuestionIndex]}
+            />
             <button
                 onClick={handleNextQuestion}
                 style={{
